@@ -31,44 +31,46 @@
 
         <!-- Rechte Spalte: Tabelle -->
         <div class="col-12 col-md-8">
-            @foreach ($staff as $person)
-                <div id="details-{{ $person->staffId }}" class="collapse">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>{{ $person->lastName }}, {{ $person->firstName }}</h4>
-                            <small class="text-muted">({{ $person->weeklyHours }} Stunden/Woche)</small>
-                        </div>
-                        <div class="card-body">
-                            <h6>Verlauf der Wochenstunden</h6>
-                            <table class="table table-bordered table-sm">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Gültig ab</th>
-                                    <th>Wochenstunden</th>
-                                    <th>Geändert durch</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($person->history->sortByDesc('validFrom') as $entry)
-                                    @foreach ($entry->changedFields->where('fieldName', 'weeklyHours') as $field)
-                                        <tr>
-                                            <td>{{ $entry->validFrom->format('d.m.Y') }}</td>
-                                            <td>{{ $field->newValue }} Stunden</td>
-                                            <td>{{ $entry->changeName }}</td>
-                                        </tr>
+            <div class="accordion" id="staffAccordion">
+                @foreach ($staff as $person)
+                    <div id="details-{{ $person->staffId }}" class="accordion-collapse collapse" data-bs-parent="#staffAccordion">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>{{ $person->lastName }}, {{ $person->firstName }}</h4>
+                                <small class="text-muted">({{ $person->weeklyHours }} Stunden/Woche)</small>
+                            </div>
+                            <div class="card-body">
+                                <h6>Verlauf der Wochenstunden</h6>
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th>Gültig ab</th>
+                                        <th>Wochenstunden</th>
+                                        <th>Geändert durch</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($person->history->sortByDesc('validFrom') as $entry)
+                                        @foreach ($entry->changedFields->where('fieldName', 'weeklyHours') as $field)
+                                            <tr>
+                                                <td>{{ $entry->validFrom->format('d.m.Y') }}</td>
+                                                <td>{{ $field->newValue }} Stunden</td>
+                                                <td>{{ $entry->changeName }}</td>
+                                            </tr>
+                                        @endforeach
                                     @endforeach
-                                @endforeach
-                                <tr>
-                                    <td>{{ $person->startDate->format('d.m.Y') }}</td>
-                                    <td>{{ $person->initialWeeklyHours }} Stunden</td>
-                                    <td>system (Bei Erstellung)</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    <tr>
+                                        <td>{{ $person->startDate->format('d.m.Y') }}</td>
+                                        <td>{{ $person->initialWeeklyHours }} Stunden</td>
+                                        <td>system (Bei Erstellung)</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
 @endsection
