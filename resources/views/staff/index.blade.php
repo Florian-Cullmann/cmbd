@@ -5,19 +5,28 @@
     <div class="row">
         <!-- Linke Spalte: Mitarbeiterliste -->
         <div class="col-12 col-md-4">
-            <div class="list-group">
-                @foreach ($staff as $person)
-                    <a href="#details-{{ $person->staffId }}"
-                       class="list-group-item list-group-item-action"
-                       data-bs-toggle="collapse"
-                       data-bs-target=".collapse.show, #details-{{ $person->staffId }}"
-                       role="button"
-                       aria-expanded="false"
-                       aria-controls="details-{{ $person->staffId }}">
-                        {{ $person->lastName }}, {{ $person->firstName }}
-                    </a>
-                @endforeach
-            </div>
+            @foreach ($staff as $person)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="#details-{{ $person->staffId }}"
+                               class="text-decoration-none"
+                               data-bs-toggle="collapse"
+                               role="button"
+                               aria-expanded="false"
+                               aria-controls="details-{{ $person->staffId }}">
+                                {{ $person->lastName }}, {{ $person->firstName }}
+                            </a>
+                        </h5>
+                        <small class="text-muted">({{ $person->weeklyHours }} Stunden/Woche)</small>
+                        <p class="card-text">
+                            <strong>Vertragsbeginn:</strong> {{ $person->startDate->format('d.m.Y') }}<br />
+                            <strong>Vertragsende:</strong> {{ $person->endDate ? $person->endDate->format('d.m.Y') : "laufend" }}<br />
+                            <strong>Letzte Aktualisierung:</strong> {{ $person->lastChangeDate ? $person->lastChangeDate->format('d.m.Y') : 'nie' }}
+                        </p>
+                    </div>
+                </div>
+            @endforeach
         </div>
 
         <!-- Rechte Spalte: Tabelle -->
@@ -30,11 +39,6 @@
                             <small class="text-muted">({{ $person->weeklyHours }} Stunden/Woche)</small>
                         </div>
                         <div class="card-body">
-                            <p>
-                                <strong>Vertragsbeginn:</strong> {{ $person->startDate->format('d.m.Y') }}<br />
-                                <strong>Vertragsende:</strong> {{ $person->endDate ? $person->endDate->format('d.m.Y') : "laufend" }}<br />
-                                <strong>Letzte Aktualisierung:</strong> {{ $person->lastChangeDate ? $person->lastChangeDate->format('d.m.Y') : 'nie' }}
-                            </p>
                             <h6>Verlauf der Wochenstunden</h6>
                             <table class="table table-bordered table-sm">
                                 <thead class="table-light">
